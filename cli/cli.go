@@ -1,19 +1,19 @@
 package cli
 
 import (
-	"github.com/syndtr/goleveldb/leveldb"
-	"github.com/urfave/cli"
-	"github.com/taskie/levelet"
 	"fmt"
-	"os"
+	"github.com/sirupsen/logrus"
+	"github.com/syndtr/goleveldb/leveldb"
+	"github.com/taskie/levelet"
+	"github.com/urfave/cli"
 	"io"
 	"io/ioutil"
-	"github.com/sirupsen/logrus"
+	"os"
 )
 
 var (
-	log = logrus.New()
-	stdin io.Reader = os.Stdin
+	log              = logrus.New()
+	stdin  io.Reader = os.Stdin
 	stdout io.Writer = os.Stdout
 )
 
@@ -81,8 +81,8 @@ func Main() {
 	app.Usage = "too simple LevelDB manipulator"
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name: "dbPath, f",
-			Usage: "LevelDB database file",
+			Name:   "dbPath, f",
+			Usage:  "LevelDB database file",
 			EnvVar: "LEVELET_DB_PATH",
 		},
 	}

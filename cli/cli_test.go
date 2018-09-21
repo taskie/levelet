@@ -1,12 +1,12 @@
 package cli
 
 import (
-	"testing"
-	"strings"
+	"bytes"
 	"io/ioutil"
 	"os"
-	"bytes"
 	"path/filepath"
+	"strings"
+	"testing"
 )
 
 func TestMain(t *testing.T) {
