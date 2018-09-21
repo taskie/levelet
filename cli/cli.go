@@ -74,7 +74,7 @@ func deleteAction(c *cli.Context) error {
 	return nil
 }
 
-func Main() {
+func mainImpl() error {
 	app := cli.NewApp()
 	app.Name = "levelet"
 	app.Version = levelet.Version
@@ -107,7 +107,11 @@ func Main() {
 		},
 	}
 
-	err := app.Run(os.Args)
+	return app.Run(os.Args)
+}
+
+func Main() {
+	err := mainImpl()
 	if err != nil {
 		log.Fatal(err)
 		os.Exit(1)
