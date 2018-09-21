@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/syndtr/goleveldb/leveldb"
+	leveldbutil "github.com/syndtr/goleveldb/leveldb/util"
 	"github.com/taskie/levelet"
 	"github.com/urfave/cli"
 	"io"
@@ -74,6 +75,28 @@ func deleteAction(c *cli.Context) error {
 	return nil
 }
 
+func listAction(c *cli.Context) error {
+	dbPath := c.GlobalString("f")
+	if dbPath == "" {
+		return fmt.Errorf("you must specify DB path (--dbPath/-f)")
+	}
+	prefix := []byte(c.Args().Get(0))
+	db, err := leveldb.OpenFile(dbPath, nil)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+
+	iter := db.NewIterator(leveldbutil.BytesPrefix(prefix), nil)
+	for iter.Next() {
+		stdout.Write(iter.Key())
+		stdout.Write([]byte("\n"))
+	}
+	iter.Release()
+	return iter.Error()
+}
+
+
 func mainImpl() error {
 	app := cli.NewApp()
 	app.Name = "levelet"
@@ -104,6 +127,12 @@ func mainImpl() error {
 			Aliases: []string{"d"},
 			Usage:   "delete key and value from DB",
 			Action:  deleteAction,
+		},
+		{
+			Name:    "list",
+			Aliases: []string{"l"},
+			Usage:   "list keys of DB",
+			Action:  listAction,
 		},
 	}
 

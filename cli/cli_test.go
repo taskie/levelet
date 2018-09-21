@@ -22,10 +22,11 @@ func TestMain(t *testing.T) {
 	}()
 
 	dbPath := filepath.Join(tmp, "test.ldb")
-	expected := "world"
+	key := "hello"
+	value := "world"
 	{
-		stdin = strings.NewReader(expected)
-		os.Args = []string{"levelet", "-f", dbPath, "p", "hello"}
+		stdin = strings.NewReader(value)
+		os.Args = []string{"levelet", "-f", dbPath, "p", key}
 		err = mainImpl()
 		if err != nil {
 			t.Fatal(err)
@@ -34,25 +35,38 @@ func TestMain(t *testing.T) {
 	{
 		buf := bytes.Buffer{}
 		stdout = &buf
-		os.Args = []string{"levelet", "-f", dbPath, "g", "hello"}
+		os.Args = []string{"levelet", "-f", dbPath, "g", key}
 		err = mainImpl()
 		actual := buf.String()
-		if actual != expected {
-			t.Fatalf("invalid value (expected: %s, actual: %s)", expected, actual)
+		if actual != value {
+			t.Fatalf("invalid value (expected: %s, actual: %s)", value, actual)
 		}
 		if err != nil {
 			t.Fatal(err)
 		}
 	}
 	{
-		os.Args = []string{"levelet", "-f", dbPath, "d", "hello"}
+		buf := bytes.Buffer{}
+		stdout = &buf
+		os.Args = []string{"levelet", "-f", dbPath, "l", "h"}
+		err = mainImpl()
+		actual := buf.String()
+		if actual != key + "\n" {
+			t.Fatalf("invalid value (expected: %s, actual: %s)", key + "\n", actual)
+		}
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+	{
+		os.Args = []string{"levelet", "-f", dbPath, "d", key}
 		err = mainImpl()
 		if err != nil {
 			t.Fatal(err)
 		}
 	}
 	{
-		os.Args = []string{"levelet", "-f", dbPath, "g", "hello"}
+		os.Args = []string{"levelet", "-f", dbPath, "g", key}
 		err = mainImpl()
 		if err == nil {
 			t.Fatal("get must fail")
