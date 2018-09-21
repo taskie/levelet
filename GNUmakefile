@@ -1,5 +1,6 @@
 .PHONY: build install test coverage dep-ensure dep-graph pre-commit
 
+CLI_PATH := github.com/taskie/levelet/cli
 CMD_DIR := cmd/levelet
 
 build:
@@ -11,11 +12,11 @@ install:
 	$(MAKE) -C $(CMD_DIR) install
 
 test:
-	go test
+	go test $(CLI_PATH)
 
 coverage:
 	mkdir -p test/coverage
-	go test -coverprofile=test/coverage/cover.out
+	go test -coverprofile=test/coverage/cover.out $(CLI_PATH)
 	go tool cover -html=test/coverage/cover.out -o test/coverage/cover.html
 
 dep-ensure:

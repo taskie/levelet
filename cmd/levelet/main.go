@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/taskie/levelet"
+	"github.com/taskie/levelet/cli"
 )
 
 func main() {
-	levelet.Main()
+	cli.Main()
 }

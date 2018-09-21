@@ -1,4 +1,4 @@
-package levelet
+package cli
 
 import (
 	"testing"
